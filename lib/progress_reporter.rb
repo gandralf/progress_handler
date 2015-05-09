@@ -3,7 +3,7 @@ require 'progress_reporter/configuration'
 
 class ProgressReporter
   attr_accessor :name, :report_gap, :total_size
-  attr_reader :count, :progress
+  attr_reader :progress
 
   def initialize(options)
     @name = options[:name]
@@ -20,28 +20,30 @@ class ProgressReporter
 
   def increment
     yield
-    @count += 1
+    @progress += 1
 
     notify_observers { |o| o.notify_item(self) }
 
-    if report_gap > 0 and count % report_gap == 0
-      @progress = 100.0 * count / total_size
+    if report_gap > 0 and progress % report_gap == 0
       notify_observers { |o| o.notify_progress(self) }
     end
   end
 
+  def percent_progress
+    100.0 * progress / total_size if total_size
+  end
+
   def time_left
-    if total_size && count > 0
-      (total_size - count) * ((Time.now - @start_time) / count)
+    if total_size && progress > 0
+      (total_size - progress) * ((Time.now - @start_time) / progress)
     end
   end
 
   private
 
   def reset(total_size)
-    @progress = 0
     @total_size = total_size
-    @count = 0
+    @progress = 0
     @start_time = Time.now
   end
 

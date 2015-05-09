@@ -11,10 +11,11 @@ describe ProgressReporter do
     end
   end
 
+  it('has name') { expect(subject.name).to eq 'Specs' }
+  it('has a report gap') { expect(subject.report_gap).to eq 2 }
+
   describe '#each' do
     it('yields for each item') { expect {|b| subject.each(items, &b) }.to yield_successive_args(*items) }
-    it('has name') { expect(subject.name).to eq 'Specs' }
-    it('has a report gap') { expect(subject.report_gap).to eq 2 }
 
     describe 'observer notification' do
       it('notifies each item') { expect(observer).to receive(:notify_item).with(subject).exactly(items.count).times }
