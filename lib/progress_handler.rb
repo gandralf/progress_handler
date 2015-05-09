@@ -1,7 +1,7 @@
-require 'progress_reporter/version'
-require 'progress_reporter/configuration'
+require 'progress_handler/version'
+require 'progress_handler/configuration'
 
-class ProgressReporter
+class ProgressHandler
   attr_accessor :name, :report_gap, :total_size
   attr_reader :progress
 
@@ -48,6 +48,6 @@ class ProgressReporter
   end
 
   def notify_observers(&block)
-    ProgressReporter.configuration.observers.each {|o| block.call(o) }
+    ProgressHandler.configuration.reporters.each {|o| block.call(o) }
   end
 end

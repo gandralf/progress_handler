@@ -1,4 +1,4 @@
-# Progress Reporter
+# Progress Handler
 
 Useful tool to register, follow or even interrupt the progress of a background job 
 
@@ -7,7 +7,7 @@ Useful tool to register, follow or even interrupt the progress of a background j
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'progress_reporter'
+gem 'progress_handler'
 ```
 
 And then execute:
@@ -16,16 +16,16 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install progress_reporter
+    $ gem install progress_handler
 
 ## Usage
 
-Very simple progress reporter.
+Very simple progress handler, to see reports or pause/resume the processing itself.
 
 **Sample usage (iterate a 100 items list)**
 
 ```ruby
-p = ProgressReporter.new 100
+p = ProgressHandler.new 100
 100.times do
   p.increment do
     sleep 1
@@ -36,7 +36,7 @@ end
 **or**
 
 ```ruby
-ProgressReporter.each(iterator) {|item| item.something }
+ProgressHandler.each(iterator) {|item| item.something }
 ```
 
 ## Development
@@ -49,7 +49,7 @@ version number in `version.rb`, and then run `bundle exec rake release` to creat
 
 ## Contributing
 
-1. Fork it ( https://github.com/gandralf/progress_reporter/fork )
+1. Fork it ( https://github.com/gandralf/progress_handler/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

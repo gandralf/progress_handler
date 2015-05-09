@@ -1,5 +1,5 @@
-class ProgressReporter
-  module Observers
+class ProgressHandler
+  module Reporters
     class Console
       def notify_item(pr)
         show_progress(pr) if pr.progress == 1

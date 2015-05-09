@@ -1,4 +1,4 @@
-class ProgressReporter
+class ProgressHandler
   class << self
     attr_writer :configuration
   end
@@ -9,13 +9,13 @@ class ProgressReporter
 
   def self.configuration
     @configuration ||= begin
-      config = ProgressReporter::Configuration.new
-      config.observers = []
+      config = ProgressHandler::Configuration.new
+      config.reporters = []
       config
     end
   end
 
   class Configuration
-    attr_accessor :observers
+    attr_accessor :reporters
   end
 end

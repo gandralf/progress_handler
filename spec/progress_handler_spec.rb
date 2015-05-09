@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe ProgressReporter do
+describe ProgressHandler do
   let(:items) { 5.times.map &:to_s }
-  subject { ProgressReporter.new name: 'Specs', report_gap: 2 }
+  subject { ProgressHandler.new name: 'Specs', report_gap: 2 }
 
   it('has name') { expect(subject.name).to eq 'Specs' }
   it('has a report gap') { expect(subject.report_gap).to eq 2 }
@@ -13,8 +13,8 @@ describe ProgressReporter do
     describe 'observer notification' do
       let(:observer) { double(:observer, notify_item: nil, notify_progress: nil) }
       before do
-        ProgressReporter.configure do |config|
-          config.observers = [ observer ]
+        ProgressHandler.configure do |config|
+          config.reporters = [ observer ]
         end
       end
 

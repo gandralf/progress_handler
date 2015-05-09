@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'progress_reporter/version'
+require 'progress_handler/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'progress_reporter'
-  spec.version       = ProgressReporter::VERSION
+  spec.name          = 'progress_handler'
+  spec.version       = ProgressHandler::VERSION
   spec.authors       = ['Alexandre Gandra Lages']
   spec.email         = ['gandra@gmail.com']
 

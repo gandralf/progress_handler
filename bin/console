@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'bundler/setup'
-require 'progress_reporter'
+require 'progress_handler'
 
 require 'pry'
 Pry.start
