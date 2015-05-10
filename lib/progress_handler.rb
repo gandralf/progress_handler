@@ -15,18 +15,18 @@ class ProgressHandler
   def each(items)
     reset(items.count)
     items.each do |item|
-      increment { yield item }
+      increment(item) { yield item }
     end
   end
 
-  def increment
+  def increment(item)
     yield
     @progress += 1
 
-    notify_reporters { |o| o.notify_item(self) }
+    notify_reporters { |o| o.notify_item(item) }
 
     if (report_gap > 0 and progress % report_gap == 0) || (progress == total_size)
-      notify_reporters { |o| o.notify_progress(self) }
+      notify_reporters { |o| o.notify_progress }
     end
   end
 
@@ -45,7 +45,7 @@ class ProgressHandler
   def setup_reporters(options)
     @reporters = []
     ProgressHandler.configuration.reporters.each do |reporter_class, reporter_options|
-      @reporters << reporter_class.new(reporter_options, options)
+      @reporters << reporter_class.new(self, reporter_options, options)
     end
   end
 

@@ -21,15 +21,15 @@ describe ProgressHandler do
       let(:observer_class) { double }
       let(:observer) { double(:observer, notify_item: nil, notify_progress: nil) }
       before do
-        expect(observer_class).to receive(:new).and_return(observer)
+        allow(observer_class).to receive(:new).and_return(observer)
         ProgressHandler.configure do |config|
           config.reporters = { observer_class => {} }
         end
       end
 
       it('has the observer list at #reporters') { expect(subject.reporters).to eq [observer] }
-      it('notifies each item') { expect(observer).to receive(:notify_item).with(subject).exactly(items.count).times }
-      it('notifies progress') { expect(observer).to receive(:notify_progress).with(subject).exactly(3).times }
+      it('notifies each item') { expect(observer).to receive(:notify_item).exactly(items.count).times }
+      it('notifies progress') { expect(observer).to receive(:notify_progress).exactly(3).times }
       after { subject.each(items) {} }
     end
   end
@@ -37,7 +37,7 @@ describe ProgressHandler do
   describe '#time_left' do
     it do
       subject.total_size = 5
-      subject.increment { sleep 1 }
+      subject.increment(1) { sleep 1 }
       expect(subject.time_left).to be_within(0.1).of(4)
     end
     it('is undefined right on start') { expect(subject.time_left).to be_nil }
