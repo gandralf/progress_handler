@@ -2,10 +2,7 @@ require 'spec_helper'
 require 'progress_handler/reporters/console'
 
 describe ProgressHandler::Reporters::Console do
-  before { ProgressHandler.configure {|config| config.reporters = [described_class.new] } }
+  setup_reporter_spec(described_class)
 
-  let(:items) { 5.times.map &:to_s }
-  let(:pr) { ProgressHandler.new name: 'Specs', report_gap: 2 }
-
-  it { pr.each(items) {} }
+  it { progress_handler.each(items) {} }
 end

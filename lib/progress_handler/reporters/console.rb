@@ -1,6 +1,9 @@
 class ProgressHandler
   module Reporters
     class Console
+      def initialize(_, _)
+      end
+
       def notify_item(pr)
         show_progress(pr) if pr.progress == 1
         print '.'

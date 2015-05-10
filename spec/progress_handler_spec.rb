@@ -11,10 +11,12 @@ describe ProgressHandler do
     it('yields for each item') { expect {|b| subject.each(items, &b) }.to yield_successive_args(*items) }
 
     describe 'observer notification' do
+      let(:observer_class) { double }
       let(:observer) { double(:observer, notify_item: nil, notify_progress: nil) }
       before do
+        expect(observer_class).to receive(:new).and_return(observer)
         ProgressHandler.configure do |config|
-          config.reporters = [ observer ]
+          config.reporters = { observer_class => {} }
         end
       end
 

@@ -8,6 +8,7 @@ class ProgressHandler
   def initialize(options)
     @name = options[:name]
     @report_gap = options[:report_gap]
+    setup_reporters(options)
     reset(options[:total_size])
   end
 
@@ -22,10 +23,10 @@ class ProgressHandler
     yield
     @progress += 1
 
-    notify_observers { |o| o.notify_item(self) }
+    notify_reporters { |o| o.notify_item(self) }
 
     if report_gap > 0 and progress % report_gap == 0
-      notify_observers { |o| o.notify_progress(self) }
+      notify_reporters { |o| o.notify_progress(self) }
     end
   end
 
@@ -41,13 +42,20 @@ class ProgressHandler
 
   private
 
+  def setup_reporters(options)
+    @reporters = []
+    ProgressHandler.configuration.reporters.each do |reporter_class, reporter_options|
+      @reporters << reporter_class.new(reporter_options, options)
+    end
+  end
+
   def reset(total_size)
     @total_size = total_size
     @progress = 0
     @start_time = Time.now
   end
 
-  def notify_observers(&block)
-    ProgressHandler.configuration.reporters.each {|o| block.call(o) }
+  def notify_reporters(&block)
+    @reporters.each {|o| block.call(o) }
   end
 end

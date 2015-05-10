@@ -10,7 +10,7 @@ class ProgressHandler
   def self.configuration
     @configuration ||= begin
       config = ProgressHandler::Configuration.new
-      config.reporters = []
+      config.reporters = {}
       config
     end
   end
