@@ -3,7 +3,7 @@ require 'progress_handler/configuration'
 
 class ProgressHandler
   attr_accessor :name, :report_gap, :total_size
-  attr_reader :progress, :reporters
+  attr_reader :progress, :reporters, :start_time
 
   def initialize(options)
     @name = options[:name]
