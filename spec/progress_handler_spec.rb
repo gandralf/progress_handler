@@ -10,6 +10,13 @@ describe ProgressHandler do
   describe '#each' do
     it('yields for each item') { expect {|b| subject.each(items, &b) }.to yield_successive_args(*items) }
 
+    describe 'finished state' do
+      before { subject.each(items) {} }
+
+      it { expect(subject.progress).to eq items.size }
+      it { expect(subject.percent_progress).to eq 100.0 }
+    end
+
     describe 'observer notification' do
       let(:observer_class) { double }
       let(:observer) { double(:observer, notify_item: nil, notify_progress: nil) }
