@@ -44,4 +44,14 @@ describe ProgressHandler::Reporters::RedisReporter do
     before { progress_handler.each(items) {} }
     it { expect(redis.hget('progress:rspec:Specs', :progress)).to eq '5' }
   end
+
+  describe 'stop?' do
+    context 'when check on report progress' do
+      before do
+        redis.hset 'progress:Specs', 'stop', true
+        progress_handler.each(items) {}
+      end
+      it { expect(subject.progress[:progress]).to eq 0 }
+    end
+  end
 end

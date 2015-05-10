@@ -19,7 +19,7 @@ describe ProgressHandler do
 
     describe 'observer notification' do
       let(:observer_class) { double }
-      let(:observer) { double(:observer, notify_item: nil, notify_progress: nil) }
+      let(:observer) { double(:observer, notify_item: nil, notify_progress: nil, stop?: false) }
       before do
         allow(observer_class).to receive(:new).and_return(observer)
         ProgressHandler.configure do |config|
@@ -31,6 +31,11 @@ describe ProgressHandler do
       it('notifies each item') { expect(observer).to receive(:notify_item).exactly(items.count).times }
       it('notifies progress') { expect(observer).to receive(:notify_progress).exactly(3).times }
       after { subject.each(items) {} }
+
+      describe 'observer stop signal' do
+        let(:observer) { double(:observer, notify_item: nil, notify_progress: nil, stop?: true) }
+        it('notifies each item') { expect(observer).to receive(:notify_item).exactly(1).times }
+      end
     end
   end
 

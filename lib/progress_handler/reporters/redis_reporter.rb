@@ -2,22 +2,25 @@ require 'redis'
 
 class ProgressHandler
   module Reporters
-    class RedisReporter
+    class RedisReporter < ProgressHandler::Reporters::Base
       DEFAULT_EXPIRES = 3600
       attr_reader :redis
 
       def initialize(progress_handler, reporter_options, ph_options)
-        @progress_handler = progress_handler
+        super
         @redis = reporter_options.fetch(:redis)
         @report_item = reporter_options[:report_item]
-        @parent = ph_options[:parent]
         @expires = reporter_options.fetch(:expires, DEFAULT_EXPIRES)
 
         notify_progress
+        redis.hdel redis_key, 'stop'
       end
 
       def notify_item(_)
-        notify_progress if @report_item
+        if @report_item
+          notify_progress
+          check_stop_flag
+        end
       end
 
       def notify_progress
@@ -29,6 +32,7 @@ class ProgressHandler
         }
 
         redis.hmset redis_key, *progress
+        check_stop_flag
         set_expire if done?
       end
 
@@ -46,7 +50,6 @@ class ProgressHandler
       end
 
       private
-      attr_reader :progress_handler
 
       def set_expire
         redis.expire redis_key, @expires
@@ -56,9 +59,13 @@ class ProgressHandler
         progress_handler.total_size && (progress_handler.progress == progress_handler.total_size)
       end
 
+      def check_stop_flag
+        @stop = redis.hget redis_key, 'stop'
+      end
+
       def redis_key
-        if @parent
-          "progress:#{@parent}:#{progress_handler.name}"
+        if parent
+          "progress:#{parent}:#{progress_handler.name}"
         else
           "progress:#{progress_handler.name}"
         end

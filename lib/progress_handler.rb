@@ -1,5 +1,6 @@
 require 'progress_handler/version'
 require 'progress_handler/configuration'
+require 'progress_handler/reporters/base'
 
 class ProgressHandler
   attr_accessor :name, :report_gap, :total_size
@@ -16,6 +17,7 @@ class ProgressHandler
     reset(items.count)
     items.each do |item|
       increment(item) { yield item }
+      break if stop?
     end
   end
 
@@ -57,5 +59,9 @@ class ProgressHandler
 
   def notify_reporters(&block)
     @reporters.each {|o| block.call(o) }
+  end
+
+  def stop?
+    reporters.map(&:stop?).reduce(false) {|result, stop| result || stop}
   end
 end
