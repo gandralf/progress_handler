@@ -3,7 +3,7 @@ require 'progress_handler/configuration'
 
 class ProgressHandler
   attr_accessor :name, :report_gap, :total_size
-  attr_reader :progress
+  attr_reader :progress, :reporters
 
   def initialize(options)
     @name = options[:name]
@@ -25,7 +25,7 @@ class ProgressHandler
 
     notify_reporters { |o| o.notify_item(self) }
 
-    if report_gap > 0 and progress % report_gap == 0
+    if (report_gap > 0 and progress % report_gap == 0) || (progress == total_size)
       notify_reporters { |o| o.notify_progress(self) }
     end
   end

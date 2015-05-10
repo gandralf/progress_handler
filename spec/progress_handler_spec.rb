@@ -27,8 +27,9 @@ describe ProgressHandler do
         end
       end
 
+      it('has the observer list at #reporters') { expect(subject.reporters).to eq [observer] }
       it('notifies each item') { expect(observer).to receive(:notify_item).with(subject).exactly(items.count).times }
-      it('notifies progress') { expect(observer).to receive(:notify_progress).with(subject).exactly(2).times }
+      it('notifies progress') { expect(observer).to receive(:notify_progress).with(subject).exactly(3).times }
       after { subject.each(items) {} }
     end
   end
