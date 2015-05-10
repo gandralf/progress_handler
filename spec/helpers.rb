@@ -3,6 +3,7 @@ module Helpers
     before { ProgressHandler.configure {|config| config.reporters = {reporter => reporter_options} } }
     let(:reporter_options) { {} }
     let(:items) { 5.times.map &:to_s }
-    let(:progress_handler) { ProgressHandler.new name: 'Specs', report_gap: 2 }
+    let(:progress_handler) { ProgressHandler.new ph_options }
+    let(:ph_options) { { name: 'Specs', report_gap: 2 } }
   end
 end
