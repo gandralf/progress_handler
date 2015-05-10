@@ -1,3 +1,5 @@
+require 'progress_handler/reporters/console'
+
 class ProgressHandler
   class << self
     attr_writer :configuration
@@ -10,7 +12,9 @@ class ProgressHandler
   def self.configuration
     @configuration ||= begin
       config = ProgressHandler::Configuration.new
-      config.reporters = {}
+      config.reporters = {
+          ProgressHandler::Reporters::Console => {}
+      }
       config
     end
   end

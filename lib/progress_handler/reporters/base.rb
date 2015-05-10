@@ -1,7 +1,7 @@
 class ProgressHandler
   module Reporters
     class Base
-      attr_reader :progress_handler, :parent
+      attr_reader :progress_handler, :parent, :options, :ph_options
 
       def initialize(progress_handler, reporter_options, ph_options)
         @progress_handler = progress_handler

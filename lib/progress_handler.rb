@@ -1,14 +1,14 @@
 require 'progress_handler/version'
-require 'progress_handler/configuration'
 require 'progress_handler/reporters/base'
+require 'progress_handler/configuration'
 
 class ProgressHandler
   attr_accessor :name, :report_gap, :total_size
   attr_reader :progress, :reporters, :start_time
 
-  def initialize(options)
-    @name = options[:name]
-    @report_gap = options[:report_gap]
+  def initialize(options = {})
+    @name = options[:name] || SecureRandom.uuid
+    @report_gap = options[:report_gap] || 100
     setup_reporters(options)
     reset(options[:total_size])
   end

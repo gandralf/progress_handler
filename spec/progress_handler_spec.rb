@@ -37,6 +37,13 @@ describe ProgressHandler do
         it('notifies each item') { expect(observer).to receive(:notify_item).exactly(1).times }
       end
     end
+
+    context 'when using defaults' do
+      subject { ProgressHandler.new }
+      before { subject.each(items) {} }
+
+      it { expect(subject.progress).to eq items.size }
+    end
   end
 
   describe '#time_left' do

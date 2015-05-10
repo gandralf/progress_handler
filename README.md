@@ -22,21 +22,36 @@ Or install it yourself as:
 
 Very simple progress handler, to see reports or pause/resume the processing itself.
 
-**Sample usage (iterate a 100 items list)**
+    ➜  progress_handler git:(master) bin/console
+    [1] pry(main)> it = 120.times
+    => #<Enumerator: ...>
+    [2] pry(main)> ProgressHandler.new(name: 'Hello', report_gap: 50).each(it) {|item| sleep 0.5 }
+    
+    Hello: 1 / 120 => 0.8%, 1.0 minutes to go ..................................................
+    Hello: 50 / 120 => 41.7%, 0.6 minutes to go ..................................................
+    Hello: 100 / 120 => 83.3%, 0.2 minutes to go ....................
+    Hello: done. 120 items in 1.0 minutes
+    => 120
+
+### Reporters
+
+Reporters show what is going on. This gem have the following built-in reporters:
+- A console reporter (set up by default)
+- A redis reporter
+
+To create or use a reporter, you must configure it, like:
 
 ```ruby
-p = ProgressHandler.new 100
-100.times do
-  p.increment do
-    sleep 1
-  end
+require 'progress_handler/reporters/redis_reporter'
+
+#...
+ProgressHandler.configure do |config|
+  config.reporters = {
+    ProgressHandler::Reporters::RedisReporter => {
+      redis: Redis.new
+    }
+  }
 end
-```
-
-**or**
-
-```ruby
-ProgressHandler.each(iterator) {|item| item.something }
 ```
 
 ## Development
