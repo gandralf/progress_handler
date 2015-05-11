@@ -3,7 +3,7 @@ class ProgressHandler
     class Console < ProgressHandler::Reporters::Base
       def notify_item(_)
         show_progress if progress_handler.progress == 1
-        print '.'
+        print '.' unless logger
       end
 
       def notify_progress
@@ -15,14 +15,19 @@ class ProgressHandler
       end
 
       def show_progress
-        print "\n#{name}: " if name
-        printf "#{progress_handler.progress} / #{progress_handler.total_size} => %3.1f%%, %3.1f minutes to go ",
-               progress_handler.percent_progress, progress_handler.time_left / 60.0
+        msg = ''
+        msg << "\n" unless logger
+        msg << "#{name}: " if name
+        msg << sprintf("#{progress_handler.progress} / #{progress_handler.total_size} => %3.1f%%, %3.1f minutes to go ",
+               progress_handler.percent_progress, progress_handler.time_left / 60.0)
+        write(msg)
       end
 
       def show_done
         t = (Time.now - progress_handler.start_time) / 60
-        printf "\n#{name}: done. #{progress_handler.total_size} items in %.1f minutes\n", t
+        msg = sprintf("#{name}: done. #{progress_handler.total_size} items in %.1f minutes", t)
+        msg = "\n#{msg}\n" unless logger
+        write msg
       end
 
       private
@@ -35,6 +40,17 @@ class ProgressHandler
         end
       end
 
+      def write(s)
+        if logger
+          logger.info(s)
+        else
+          print s
+        end
+      end
+
+      def logger
+        options[:logger]
+      end
     end
   end
 end
